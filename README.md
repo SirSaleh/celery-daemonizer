@@ -1,2 +1,19 @@
 # celery-daemonizer
-simple scripts to daemoniz celery apps
+simple scripts to daemonize celery apps. currently it is only available for
+python apps.
+
+# usage
+
+
+```
+sh start.sh <options>
+```
+
+## list of options
+
+| option | description | required/optional |
+| ----   | ----------- | ----------------- |
+| -a     | celery app (for example my_main_app.celery:app) | required |
+| -c     | your app ch-dir  | for example `/srv/my-proj/` | required |
+| -d     | celery run dir for example `/home/saleh/.local/bin/celery`. maybe `which celery` can help you | required |
+| -n     | your app name, for example `my_app` | required |
