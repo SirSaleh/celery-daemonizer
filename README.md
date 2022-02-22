@@ -14,6 +14,6 @@ sh start.sh <options>
 | option | description | required/optional |
 | ----   | ----------- | ----------------- |
 | -a     | celery app (for example my_main_app.celery:app) | required |
-| -c     | your app ch-dir  | for example `/srv/my-proj/` | required |
+| -c     | your app ch-dir, for example `/srv/my-proj/` | required |
 | -d     | celery run dir for example `/home/saleh/.local/bin/celery`. maybe `which celery` can help you | required |
 | -n     | your app name, for example `my_app` | required |
