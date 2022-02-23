@@ -97,11 +97,35 @@ CELERYD_LOG_LEVEL="INFO"
 CELERY_CREATE_DIRS=1
 EOT
 
+## configure celery beat
+
+sudo tee /etc/default/celerybeat > /dev/null << EOT
+# Absolute or relative path to the 'celery' command:
+CELERY_BIN="${celeryDir}"
+
+# App instance to use
+# comment out this line if you don't use an app
+CELERY_APP="${CELERY_APP}"
+# or fully qualified:
+#CELERY_APP="${CELERY_APP}"
+
+# Where to chdir at start.
+CELERYBEAT_CHDIR="${projectCHDir}"
+
+# Extra arguments to celerybeat
+CELERYBEAT_OPTS="--schedule=/var/run/celery/celerybeat-schedule"
+
+CELERYBEAT_LOG_FILE="/var/log/celery/%n%I.log"
+CELERYBEAT_PID_FILE="/var/run/celery/%n.pid"
+EOT
+
 # change the owner of the log dirs
 chown -R celery:celery /var/log/celery/
 chown -R celery:celery /var/run/celery/
 
 # creating the systemd file
+# here will will create both systemd files for 
+# celery worker and beat
 touch /etc/systemd/system/celery.service
 
 sudo tee /etc/systemd/system/celery.service > /dev/null << EOT
@@ -129,10 +153,32 @@ ExecReload=${celeryDir} \${CELERY_BIN} multi restart \${CELERYD_NODES} \
 WantedBy=multi-user.target
 EOT
 
+sudo tee /etc/systemd/system/celerybeat.service > /dev/null << EOT
+[Unit]
+Description=Celery Beat Service
+After=network.target
+
+[Service]
+Type=simple
+User=celery
+Group=celery
+EnvironmentFile=/etc/default/celerybeat
+WorkingDirectory=${projectCHDir}
+ExecStart=/bin/sh -c '\${CELERY_BIN} -A \${CELERY_APP} beat  \
+    --pidfile=\${CELERYBEAT_PID_FILE} \
+    --logfile=\${CELERYBEAT_LOG_FILE} --loglevel=\${CELERYD_LOG_LEVEL}'
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+EOT
+
+
 sudo systemctl daemon-reload
 sudo systemctl enable celery
+sudo systemctl enable celerybeat
 sudo systemctl restart celery
-
+sudo systemctl restart celerybeat
 
 ## You can test it using this command
 ## celery -A CELERY_APP_NAME worker -l INFO
