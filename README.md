@@ -9,7 +9,7 @@ python apps.
 sh start.sh <options>
 ```
 
-**Note**: start.sh need the root access. So you if you are not using the root user, you will probably need to use
+**Note**: `start.sh` needs the root access. So you if you are not using the root user, you will probably need to use
 `sudo`.
 
 ## list of options
