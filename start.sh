@@ -34,8 +34,8 @@ sudo groupadd celery
 sudo useradd -g celery celery
 
 # install requirements
-
-pip install celery
+pip3 install celery
+pip3 install Redis
 
 # install redis
 
@@ -55,7 +55,7 @@ mkdir /var/run/celery
 
 sudo tee /etc/default/celeryd > /dev/null << EOT
 #   most people will only start one node:
-CELERYD_NODES="worker1"
+CELERYD_NODES="worker1 worker2 worker3"
 #   but you can also start multiple and configure settings
 #   for each in CELERYD_OPTS
 #CELERYD_NODES="worker1 worker2 worker3"
@@ -115,8 +115,8 @@ CELERYBEAT_CHDIR="${projectCHDir}"
 # Extra arguments to celerybeat
 CELERYBEAT_OPTS="--schedule=/var/run/celery/celerybeat-schedule"
 
-CELERYBEAT_LOG_FILE="/var/log/celery/%n%I.log"
-CELERYBEAT_PID_FILE="/var/run/celery/%n.pid"
+CELERYBEAT_LOG_FILE="/var/log/celery/beat-%n%I.log"
+CELERYBEAT_PID_FILE="/var/run/celery/beat-%n.pid"
 EOT
 
 # change the owner of the log dirs
