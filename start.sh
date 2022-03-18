@@ -141,6 +141,10 @@ chown root:root /etc/init.d/celerybeat
 /etc/init.d/celerybeat stop
 /etc/init.d/celeryd start
 /etc/init.d/celerybeat start
+# make the init.d services startup
+update-rc.d celeryd defaults
+update-rc.d celerybeat defaults
+
 
 printf "
 \033[0;32m
