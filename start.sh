@@ -33,7 +33,7 @@ BASEDIR=$PWD
 cd $BASEDIR
 
 # update the repos
-sudo apt-get update
+sudo apt-get update > /dev/null 2>&1
 
 # base configure
 
