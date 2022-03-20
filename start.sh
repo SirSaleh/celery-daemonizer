@@ -141,6 +141,11 @@ chown root:root /etc/init.d/celerybeat
 /etc/init.d/celerybeat stop
 /etc/init.d/celeryd start
 /etc/init.d/celerybeat start
+# make the init.d services startup
+update-rc.d celeryd defaults
+update-rc.d celerybeat defaults
+grep 'root sleep 60 && /etc/init.d/celerybeat start && /etc/init.d/celerybeat start' /etc/crontab || echo '@reboot root sleep 60 && /etc/init.d/celerybeat start && /etc/init.d/celerybeat start' >> /etc/crontab
+
 
 printf "
 \033[0;32m
